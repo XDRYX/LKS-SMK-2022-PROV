@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LKSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="customer">
+    <Key>
+      <PropertyRef Name="id_customer" />
+    </Key>
+    <Property Name="id_customer" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="first_name" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="last_name" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="phone" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="address" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'LKS.dbo.order' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="order">
+    <Key>
+      <PropertyRef Name="id_customer" />
+      <PropertyRef Name="id_product" />
+      <PropertyRef Name="id" />
+      <PropertyRef Name="order_date" />
+      <PropertyRef Name="order_qty" />
+    </Key>
+    <Property Name="id_customer" Type="int" Nullable="false" />
+    <Property Name="id_product" Type="int" Nullable="false" />
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="order_date" Type="date" Nullable="false" />
+    <Property Name="order_qty" Type="varchar" MaxLength="45" Nullable="false" />
+  </EntityType>
+  <EntityType Name="product">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="stock" Type="int" Nullable="false" />
+    <Property Name="price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="description" Type="text" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'LKS.dbo.user' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="id_user" />
+      <PropertyRef Name="username" />
+      <PropertyRef Name="password" />
+    </Key>
+    <Property Name="id_user" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="first_name" Type="varchar" MaxLength="30" />
+    <Property Name="last_name" Type="varchar" MaxLength="30" />
+  </EntityType>
+  <Association Name="FK__o__id_customer__29572725">
+    <End Role="customer" Type="Self.customer" Multiplicity="1" />
+    <End Role="order" Type="Self.order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="customer">
+        <PropertyRef Name="id_customer" />
+      </Principal>
+      <Dependent Role="order">
+        <PropertyRef Name="id_customer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__o__id_product__2A4B4B5E">
+    <End Role="product" Type="Self.product" Multiplicity="1" />
+    <End Role="order" Type="Self.order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="product">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="order">
+        <PropertyRef Name="id_product" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="LKSModelStoreContainer">
+    <EntitySet Name="customer" EntityType="Self.customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="product" EntityType="Self.product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="order" EntityType="Self.order" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [order].[id_customer] AS [id_customer], 
+    [order].[id_product] AS [id_product], 
+    [order].[id] AS [id], 
+    [order].[order_date] AS [order_date], 
+    [order].[order_qty] AS [order_qty]
+    FROM [dbo].[order] AS [order]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="user" EntityType="Self.user" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [user].[id_user] AS [id_user], 
+    [user].[username] AS [username], 
+    [user].[password] AS [password], 
+    [user].[first_name] AS [first_name], 
+    [user].[last_name] AS [last_name]
+    FROM [dbo].[user] AS [user]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__o__id_customer__29572725" Association="Self.FK__o__id_customer__29572725">
+      <End Role="customer" EntitySet="customer" />
+      <End Role="order" EntitySet="order" />
+    </AssociationSet>
+    <AssociationSet Name="FK__o__id_product__2A4B4B5E" Association="Self.FK__o__id_product__2A4B4B5E">
+      <End Role="product" EntitySet="product" />
+      <End Role="order" EntitySet="order" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
