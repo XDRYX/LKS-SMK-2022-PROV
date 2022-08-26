@@ -33,9 +33,9 @@ namespace LKS
             {
                 query = query.Where(col => col.name.ToLower().Contains(txtSearch.Text.ToLower())).ToList();
             }
-            if(txtPriceStart.Text != "" && txtPriceStart.Text != "")
+            if(txtPriceStart.Text != "" && txtPriceEnd.Text != "")
             {
-                query = query.Where(col => -col.price >= Int32.Parse(txtPriceStart.Text) && col.price <= Int32.Parse(txtPriceEnd.Text)).ToList();
+                query = query.Where(col => col.price >= Convert.ToInt32(txtPriceStart.Text) && col.price <= Convert.ToInt32(txtPriceEnd.Text)).ToList();
             }
 
             for(int i = query.Count -1; i >= 0; i--)
